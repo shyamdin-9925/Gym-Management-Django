@@ -1,0 +1,123 @@
+{% include 'admin_nav.html' %}
+{% load static %}
+<head>
+    <title>Simple Monthly Income Report</title>
+    <style>
+        .report-header {
+            background-color: #f1f8ff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border-left: 5px solid #007bff;
+        }
+        .table th {
+            background-color: #007bff;
+            color: white;
+        }
+        .total-card {
+            background-color: #e9f7ef;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+            border-left: 5px solid #28a745;
+        }
+    </style>
+</head>
+
+<div class="container mt-5">
+    <div class="report-header">
+        <h2 class="text-center">Monthly Income Report (Simple Version)</h2>
+        <h4 class="text-center">{{ month_name }} {{ selected_year }}</h4>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" class="form-inline mb-4">
+                        {% csrf_token %}
+                        <div class="form-group mr-4">
+                            <label class="mr-2">Month:</label>
+                            <select name="month" class="form-control" style="width: 150px;">
+                                <option value="1" {% if selected_month == 1 %}selected{% endif %}>January</option>
+                                <option value="2" {% if selected_month == 2 %}selected{% endif %}>February</option>
+                                <option value="3" {% if selected_month == 3 %}selected{% endif %}>March</option>
+                                <option value="4" {% if selected_month == 4 %}selected{% endif %}>April</option>
+                                <option value="5" {% if selected_month == 5 %}selected{% endif %}>May</option>
+                                <option value="6" {% if selected_month == 6 %}selected{% endif %}>June</option>
+                                <option value="7" {% if selected_month == 7 %}selected{% endif %}>July</option>
+                                <option value="8" {% if selected_month == 8 %}selected{% endif %}>August</option>
+                                <option value="9" {% if selected_month == 9 %}selected{% endif %}>September</option>
+                                <option value="10" {% if selected_month == 10 %}selected{% endif %}>October</option>
+                                <option value="11" {% if selected_month == 11 %}selected{% endif %}>November</option>
+                                <option value="12" {% if selected_month == 12 %}selected{% endif %}>December</option>
+                            </select>
+                        </div>
+                        <div class="form-group mr-4">
+                            <label class="mr-2">Year:</label>
+                            <select name="year" class="form-control" style="width: 120px;">
+                                {% for year in available_years %}
+                                <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">View Report</button>
+                    </form>
+                    
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Sl.No</th>
+                                    <th>Member</th>
+                                    <th>Payment Date</th>
+                                    <th>Expiry Date</th>
+                                    <th>Plan Name</th>
+                                    <th>Amount (₹)</th>
+                                    <th>Validity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for payment in payments %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ payment.member.name }}</td>
+                                    <td>{{ payment.payment_date|date:"d M, Y" }}</td>
+                                    <td>
+                                        {% if payment.expiry_date %}
+                                            {{ payment.expiry_date|date:"d M, Y" }}
+                                        {% else %}
+                                            --
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ payment.plan_name|default:"--" }}</td>
+                                    <td>₹{{ payment.amount|floatformat:2 }}</td>
+                                    <td>{{ payment.validity|default:"--" }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center">No payment records found for this period</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="total-card">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Monthly Income Summary</h4>
+                                <p><strong>Total Income for {{ month_name }} {{ selected_year }}:</strong> <span class="text-success">₹{{ monthly_total|floatformat:2 }}</span></p>
+                                <p><strong>Total Members:</strong> {{ payments.count }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h4>Yearly Income Summary</h4>
+                                <p><strong>Total Income for {{ selected_year }}:</strong> <span class="text-success">₹{{ yearly_total|floatformat:2 }}</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

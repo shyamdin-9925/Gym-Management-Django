@@ -1,0 +1,60 @@
+{% include 'admin_nav.html' %}
+{% load static %}
+<head>
+    <title>Edit User Role</title>
+</head>
+
+<div class="container mt-5">
+    <h2 class="text-center">Edit User Role & Permissions</h2>
+    <hr>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" class="form-control" value="{{ user_role.user.username }}" readonly>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select name="role" class="form-control" required>
+                                <option value="">Select</option>
+                                <option value="admin" {% if user_role.role == 'admin' %}selected{% endif %}>Admin</option>
+                                <option value="manager" {% if user_role.role == 'manager' %}selected{% endif %}>Manager</option>
+                                <option value="trainer" {% if user_role.role == 'trainer' %}selected{% endif %}>Trainer</option>
+                                <option value="receptionist" {% if user_role.role == 'receptionist' %}selected{% endif %}>Receptionist</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Permissions</label>
+                            <textarea class="form-control" name="permissions" placeholder="Enter comma-separated permissions">{{ user_role.permissions }}</textarea>
+                            <small class="form-text text-muted">Example: add_member,view_member,edit_member,delete_member</small>
+                        </div>
+                        
+                        <input type="submit" value="Update" class="btn btn-primary btn-block">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+</div>
+
+{% if error == "yes" %}
+<script>
+    alert('Something went wrong, try again!');
+    window.location = '{% url "edit_UserRole" user_role.id %}';
+</script>
+{% endif %}
+
+{% if error == "no" %}
+<script>
+    alert('User role updated successfully!');
+    window.location = '{% url "viewUserRoles" %}';
+</script>
+{% endif %} 

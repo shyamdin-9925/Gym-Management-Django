@@ -1,0 +1,121 @@
+{% include 'navbar.html' %}
+{% load static %}
+{% block main %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Fitness Gym Management</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%2316a34a'/%3E%3Ctext x='50' y='68' font-size='58' text-anchor='middle'%3E%F0%9F%8F%8B%3C/text%3E%3C/svg%3E">
+</head>
+<body>
+
+<header>
+    <div class="main-title" id="home">
+        <div class="main-text">
+            <h1>Welcome To Fitness Gym</h1>
+            <p>Your Journey to a Healthier Life Starts Here</p>
+            <div class="button-group">
+                <a href="{% url 'admin_login' %}" class="main-btn">Admin Login</a>
+                <a href="{% url 'member_login' %}" class="main-btn">Member Login</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="about" id="about">
+    <div class="about-center section-center">
+        <article class="about-info">
+            <div>
+                <h2>Welcome to Our Gym</h2>
+                <p class="abt-text">Experience state-of-the-art facilities, expert trainers, and a supportive community. 
+                Our gym offers comprehensive fitness solutions including:</p>
+                <ul class="feature-list">
+                    <li>✓ Modern Equipment</li>
+                    <li>✓ Professional Trainers</li>
+                    <li>✓ Flexible Membership Plans</li>
+                    <li>✓ Nutritional Guidance</li>
+                </ul>
+                <a href="{% url 'contact' %}" class="about-btn">Make an Enquiry</a>
+            </div>
+        </article>
+    </div>
+</section>
+
+<section id="classes">
+    <div class="section-center">
+        <div>
+            <h3 class="title">Our Classes</h3>
+        </div>
+        <div class="classes-container">
+            <article class="class-item">
+                <div class="img-container">
+                    <img src="{% static 'images/gym5.jpg' %}" alt="Weights Training">
+                </div>
+                <div class="text-container">
+                    <h4>Weight Training</h4>
+                    <p>Build strength and muscle with our expert trainers</p>
+                </div>
+            </article>
+            
+            <article class="class-item">
+                <div class="img-container">
+                    <img src="{% static 'images/Crossfit.jpg' %}" alt="Crossfit Training">
+                </div>
+                <div class="text-container">
+                    <h4>Crossfit</h4>
+                    <p>High-intensity functional training for all levels</p>
+                </div>
+            </article>
+            
+            <article class="class-item">
+                <div class="img-container">
+                    <img src="{% static 'images/Pilates.jpg' %}" alt="Pilates Class">
+                </div>
+                <div class="text-container">
+                    <h4>Pilates</h4>
+                    <p>Improve flexibility and core strength</p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+<section id="testimonial">
+    <div class="section-center">
+        <div>
+            <h3 class="title">Happy Members</h3>
+        </div>
+        <div class="client-center">
+            <article class="testimonial">
+                <h3>Abhishek Pandey</h3>
+                <p>"Their trainers are exceptional, the overall vibe is great and I have had nothing but good experiences."</p>
+            </article>
+            
+            <article class="testimonial">
+                <h3>Sandeep Sharma</h3>
+                <p>"Amazing personal trainers and complete, clean gym. Would highly recommend!"</p>
+            </article>
+            
+            <article class="testimonial">
+                <h3>Anuj Tawar</h3>
+                <p>"Trainers who really care and go above and beyond to help you achieve your goals."</p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="footer-content">
+        <p>&copy; 2026 Fitness Gym Management. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>
+{% endblock %}

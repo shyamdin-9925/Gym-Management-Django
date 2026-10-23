@@ -1,0 +1,64 @@
+{% include 'admin_nav.html' %}
+{% load static %}
+<head>
+    <title>Add Membership Plan</title>
+</head>
+
+<div class="container mt-5">
+    <h2 class="text-center">Add Membership Plan</h2>
+    <hr>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Plan Name</label>
+                            <input type="text" name="name" placeholder="Enter Plan Name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" name="description" placeholder="Enter Plan Description"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Duration (in months)</label>
+                            <input type="number" name="duration_months" placeholder="Enter Duration" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Price (₹)</label>
+                            <input type="number" step="1" name="price" placeholder="Enter Price in Rupees" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Features</label>
+                            <textarea class="form-control" name="features" placeholder="Enter comma-separated features"></textarea>
+                            <small class="form-text text-muted">Example: Personal Trainer,Pool Access,Sauna,Locker</small>
+                        </div>
+                        
+                        <input type="submit" value="Submit" class="btn btn-primary btn-block">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+</div>
+
+{% if error == "yes" %}
+<script>
+    alert('Something went wrong, try again!');
+    window.location = '{% url "addMembershipPlan" %}';
+</script>
+{% endif %}
+
+{% if error == "no" %}
+<script>
+    alert('Membership Plan added successfully!');
+    window.location = '{% url "viewMembershipPlans" %}';
+</script>
+{% endif %} 

@@ -1,0 +1,22 @@
+{% extends "member_base.html" %}
+{% block title %}Attendance{% endblock %}
+{% block content %}
+<h1>My Attendance</h1>
+<div class="card">
+  <form method="POST" action="{% url 'member_attendance_history' %}" style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
+    {% csrf_token %}
+    <div style="flex:1;min-width:180px"><label>Pick a date</label><input type="date" name="date" value="{{ selected_date }}"></div>
+    <button class="btn" type="submit" style="margin-top:0">Search</button>
+    <a class="btn" href="{% url 'member_attendance_history' %}" style="margin-top:0;background:#6c757d">This month</a>
+  </form>
+</div>
+<div class="card">
+  <h2>{% if selected_date %}Visits on {{ selected_date }}{% else %}Visits this month{% endif %} ({{ attendance_records|length }})</h2>
+  {% if attendance_records %}
+  <div class="table-scroll"><table>
+    <tr><th>Date</th><th>Check in</th><th>Check out</th><th>Time spent</th><th>Note</th></tr>
+    {% for r in attendance_records %}<tr><td>{{ r.date|date:"d M Y" }}</td><td>{{ r.check_in|time:"H:i" }}</td><td>{{ r.check_out|time:"H:i"|default:"--" }}</td><td>{{ r.duration }}</td><td>{{ r.note|default:"" }}</td></tr>{% endfor %}
+  </table></div>
+  {% else %}<p class="muted">No attendance found.</p>{% endif %}
+</div>
+{% endblock %}

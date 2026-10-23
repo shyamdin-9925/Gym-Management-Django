@@ -1,0 +1,13 @@
+{% extends "member_base.html" %}
+{% block title %}Equipment{% endblock %}
+{% block content %}
+<h1>Gym Equipment</h1>
+<div class="card">
+  {% if equipment %}
+  <div class="table-scroll"><table>
+    <tr><th>Name</th><th>Quantity</th><th>Description</th></tr>
+    {% for e in equipment %}<tr><td>{{ e.name }}</td><td>{{ e.unit|default:"--" }}</td><td>{{ e.description|default:"" }}</td></tr>{% endfor %}
+  </table></div>
+  {% else %}<p class="muted">No equipment listed.</p>{% endif %}
+</div>
+{% endblock %}

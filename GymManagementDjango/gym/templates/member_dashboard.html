@@ -1,0 +1,73 @@
+{% extends "member_base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="hero">
+  <div class="avatar">{{ member.name|slice:":1"|upper }}</div>
+  <div>
+    <h1>Welcome back, {{ member.name }}</h1>
+    <p>
+      <span class="pill">{{ plan.name|default:member.plan|default:"No plan" }}</span>
+      {% if days_left is None %}<span class="pill">Status unknown</span>
+      {% elif days_left > 7 %}<span class="pill ok">Active</span>
+      {% elif days_left > 0 %}<span class="pill warn">Expiring soon</span>
+      {% else %}<span class="pill bad">Expired</span>{% endif %}
+      Member since {{ member.joindate|date:"d M Y" }}
+    </p>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="stat"><div class="ic">&#127941;</div><div><div class="n">{{ plan.name|default:member.plan|default:"--" }}</div><div class="l">Current plan</div></div></div>
+  <div class="stat"><div class="ic">&#128197;</div><div><div class="n">{{ attendance_count }}</div><div class="l">Visits this month</div></div></div>
+  <div class="stat"><div class="ic">&#128176;</div><div><div class="n">Rs. {{ total_paid|floatformat:2 }}</div><div class="l">Total paid</div></div></div>
+  <div class="stat"><div class="ic">&#9203;</div><div><div class="n">{% if days_left is not None %}{% if days_left > 0 %}{{ days_left }} days{% else %}Expired{% endif %}{% else %}--{% endif %}</div><div class="l">Membership left{% if expiry_date %} (till {{ expiry_date|date:"d M Y" }}){% endif %}</div></div></div>
+</div>
+
+<div class="two">
+  <div class="card">
+    <h2>Recent activity</h2>
+    {% if recent_activities %}
+      <ul class="plain">{% for a in recent_activities %}<li>{{ a.title }} <span class="muted">- {{ a.timestamp|date:"d M Y" }}</span></li>{% endfor %}</ul>
+    {% else %}<p class="muted">No activity yet.</p>{% endif %}
+  </div>
+
+  <div class="card">
+    <h2>My profile</h2>
+    <form method="POST" action="{% url 'update_member_profile' %}">
+      {% csrf_token %}
+      <label>Name</label><input type="text" name="name" value="{{ member.name }}" required>
+      <label>Email</label><input type="email" name="email" value="{{ member.email }}">
+      <label>Mobile</label><input type="text" name="mobile" value="{{ member.contact }}">
+      <label>Gender</label>
+      <select name="gender">
+        <option value="Male" {% if member.gender == "Male" %}selected{% endif %}>Male</option>
+        <option value="Female" {% if member.gender == "Female" %}selected{% endif %}>Female</option>
+        <option value="Other" {% if member.gender == "Other" %}selected{% endif %}>Other</option>
+      </select>
+      <button class="btn" type="submit">Save changes</button>
+    </form>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Latest visits</h2>
+  {% if attendance_records %}
+  <div class="table-scroll"><table>
+    <tr><th>Date</th><th>Check in</th><th>Check out</th><th>Time spent</th></tr>
+    {% for r in attendance_records %}<tr><td>{{ r.date|date:"d M Y" }}</td><td>{{ r.check_in|time:"H:i" }}</td><td>{{ r.check_out|time:"H:i"|default:"--" }}</td><td>{{ r.duration }}</td></tr>{% endfor %}
+  </table></div>
+  <p><a href="{% url 'member_attendance_history' %}">View full attendance &rarr;</a></p>
+  {% else %}<p class="muted">No visits recorded yet.</p>{% endif %}
+</div>
+
+<div class="card">
+  <h2>Latest payments</h2>
+  {% if payment_history %}
+  <div class="table-scroll"><table>
+    <tr><th>Date</th><th>Amount</th><th>Method</th></tr>
+    {% for p in payment_history %}<tr><td>{{ p.payment_date|date:"d M Y" }}</td><td>Rs. {{ p.amount|floatformat:2 }}</td><td>{{ p.payment_method }}</td></tr>{% endfor %}
+  </table></div>
+  <p><a href="{% url 'member_payment_history' %}">View all payments &rarr;</a></p>
+  {% else %}<p class="muted">No payments recorded yet.</p>{% endif %}
+</div>
+{% endblock %}

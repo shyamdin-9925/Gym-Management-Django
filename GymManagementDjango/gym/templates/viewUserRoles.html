@@ -1,0 +1,60 @@
+{% include 'admin_nav.html' %}
+{% load static %}
+<head>
+    <title>View User Roles</title>
+</head>
+
+<div class="container mt-5">
+    <h2 class="text-center">View User Roles & Permissions</h2>
+    <hr>
+    
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <a href="{% url 'addUserRole' %}" class="btn btn-primary mb-3">
+                        <i class="fas fa-plus"></i> Add New User Role
+                    </a>
+                    
+                    <div class="table-responsive">
+                        <table id="example" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Role</th>
+                                    <th>Permissions</th>
+                                    <th>Created</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for role in user_roles %}
+                                <tr>
+                                    <td>{{ role.id }}</td>
+                                    <td>{{ role.user.username }}</td>
+                                    <td>{{ role.get_role_display }}</td>
+                                    <td>{{ role.permissions }}</td>
+                                    <td>{{ role.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'edit_UserRole' role.id %}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'delete_UserRole' role.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center">No user roles found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

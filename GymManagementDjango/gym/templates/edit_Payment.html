@@ -1,0 +1,81 @@
+{% include 'admin_nav.html' %}
+{% load static %}
+<head>
+    <title>Edit Payment</title>
+</head>
+
+<div class="container mt-5">
+    <h2 class="text-center">Edit Payment Record</h2>
+    <hr>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Member</label>
+                            <select name="member" class="form-control" required>
+                                <option value="">Select Member</option>
+                                {% for m in members %}
+                                <option value="{{ m.id }}" {% if payment.member.id == m.id %}selected{% endif %}>
+                                    {{ m.name }} ({{ m.contact }})
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Amount (₹)</label>
+                            <input type="number" step="1" name="amount" value="{{ payment.amount }}" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Payment Date</label>
+                            <input type="date" name="payment_date" value="{{ payment.payment_date|date:'Y-m-d' }}" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Payment Method</label>
+                            <select name="payment_method" class="form-control" required>
+                                <option value="cash" {% if payment.payment_method == 'cash' %}selected{% endif %}>Cash</option>
+                                <option value="credit_card" {% if payment.payment_method == 'credit_card' %}selected{% endif %}>Credit Card</option>
+                                <option value="debit_card" {% if payment.payment_method == 'debit_card' %}selected{% endif %}>Debit Card</option>
+                                <option value="bank_transfer" {% if payment.payment_method == 'bank_transfer' %}selected{% endif %}>Bank Transfer</option>
+                                <option value="online" {% if payment.payment_method == 'online' %}selected{% endif %}>Online Payment</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Reference Number</label>
+                            <input type="text" name="reference_number" value="{{ payment.reference_number }}" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Notes</label>
+                            <textarea class="form-control" name="notes">{{ payment.notes }}</textarea>
+                        </div>
+                        
+                        <input type="submit" value="Update Payment" class="btn btn-primary btn-block">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+</div>
+
+{% if error == "yes" %}
+<script>
+    alert('Something went wrong, try again!');
+    window.location = '{% url "edit_Payment" payment.id %}';
+</script>
+{% endif %}
+
+{% if error == "no" %}
+<script>
+    alert('Payment updated successfully!');
+    window.location = '{% url "viewPayments" %}';
+</script>
+{% endif %} 

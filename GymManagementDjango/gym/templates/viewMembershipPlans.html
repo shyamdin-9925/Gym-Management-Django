@@ -1,0 +1,64 @@
+{% include 'admin_nav.html' %}
+{% load static %}
+<head>
+    <title>View Membership Plans</title>
+</head>
+
+<div class="container mt-5">
+    <h2 class="text-center">View Membership Plans</h2>
+    <hr>
+    
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <a href="{% url 'addMembershipPlan' %}" class="btn btn-primary mb-3">
+                        <i class="fas fa-plus"></i> Add New Membership Plan
+                    </a>
+                    
+                    <div class="table-responsive">
+                        <table id="example" class="table table-hover table-responsive datatable">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Plan Name</th>
+                                    <th>Description</th>
+                                    <th>Duration (Months)</th>
+                                    <th>Price</th>
+                                    <th>Features</th>
+                                    <th>Created</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for plan in membership_plans %}
+                                <tr>
+                                    <td>{{ plan.id }}</td>
+                                    <td>{{ plan.name }}</td>
+                                    <td>{{ plan.description }}</td>
+                                    <td>{{ plan.duration_months }}</td>
+                                    <td>₹{{ plan.price }}</td>
+                                    <td>{{ plan.features }}</td>
+                                    <td>{{ plan.created_at|date:"M d, Y" }}</td>
+                                    <td>
+                                        <a href="{% url 'edit_MembershipPlan' plan.id %}" class="btn btn-sm btn-info">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="{% url 'delete_MembershipPlan' plan.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="8" class="text-center">No membership plans found</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div> 

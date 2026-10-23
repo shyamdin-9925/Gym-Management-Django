@@ -1,0 +1,15 @@
+{% extends "member_base.html" %}
+{% block title %}Payments{% endblock %}
+{% block content %}
+<h1>My Payments</h1>
+<div class="grid"><div class="stat"><div class="n">Rs. {{ total_paid }}</div><div class="l">Total paid</div></div>
+<div class="stat"><div class="n">{{ payments|length }}</div><div class="l">Payments made</div></div></div>
+<div class="card">
+  {% if payments %}
+  <div class="table-scroll"><table>
+    <tr><th>Date</th><th>Amount</th><th>Method</th><th>Reference</th><th>Notes</th></tr>
+    {% for p in payments %}<tr><td>{{ p.payment_date|date:"d M Y" }}</td><td>Rs. {{ p.amount }}</td><td>{{ p.payment_method }}</td><td>{{ p.reference_number|default:"--" }}</td><td>{{ p.notes|default:"" }}</td></tr>{% endfor %}
+  </table></div>
+  {% else %}<p class="muted">No payments recorded yet.</p>{% endif %}
+</div>
+{% endblock %}

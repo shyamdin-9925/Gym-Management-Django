@@ -1,0 +1,15 @@
+{% extends "member_base.html" %}
+{% block title %}Contact Gym{% endblock %}
+{% block content %}
+<h1>Contact the Gym</h1>
+<div class="card" style="max-width:600px">
+  {% if error == "no" %}<div class="msg success">Your message was sent. The gym will get back to you.</div>{% endif %}
+  {% if error == "yes" %}<div class="msg error">Sorry, the message could not be sent. Please try again.</div>{% endif %}
+  <form method="POST" action="{% url 'member_submit_enquiry' %}">
+    {% csrf_token %}
+    <label>Subject</label><input type="text" name="subject" required>
+    <label>Message</label><textarea name="message" rows="5" required></textarea>
+    <button class="btn" type="submit">Send</button>
+  </form>
+</div>
+{% endblock %}

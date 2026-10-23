@@ -1,0 +1,74 @@
+{% include 'admin_nav.html' %}
+{% load static %}
+<head>
+    <title>Add User Role</title>
+</head>
+
+<div class="container mt-5">
+    <h2 class="text-center">Add User Role & Permissions</h2>
+    <hr>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" name="username" placeholder="Enter Username" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Role</label>
+                            <select name="role" class="form-control" required>
+                                <option value="">Select</option>
+                                <option value="admin">Admin</option>
+                                <option value="manager">Manager</option>
+                                <option value="trainer">Trainer</option>
+                                <option value="receptionist">Receptionist</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Permissions</label>
+                            <textarea class="form-control" name="permissions" placeholder="Enter comma-separated permissions"></textarea>
+                            <small class="form-text text-muted">Example: add_member,view_member,edit_member,delete_member</small>
+                        </div>
+                        
+                        <input type="submit" value="Submit" class="btn btn-primary btn-block">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+</div>
+
+{% if error == "exists" %}
+<script>
+    alert('User role already exists for this user!');
+    window.location = '{% url "addUserRole" %}';
+</script>
+{% endif %}
+
+{% if error == "user_not_found" %}
+<script>
+    alert('User does not exist!');
+    window.location = '{% url "addUserRole" %}';
+</script>
+{% endif %}
+
+{% if error == "yes" %}
+<script>
+    alert('Something went wrong, try again!');
+    window.location = '{% url "addUserRole" %}';
+</script>
+{% endif %}
+
+{% if error == "no" %}
+<script>
+    alert('User role added successfully!');
+    window.location = '{% url "viewUserRoles" %}';
+</script>
+{% endif %} 

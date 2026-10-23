@@ -1,0 +1,68 @@
+{% include 'admin_nav.html' %}
+{% load static %}
+<head>
+    <title>Mark Attendance</title>
+</head>
+
+<div class="container mt-5">
+    <h2 class="text-center">Mark Member Attendance</h2>
+    <hr>
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label>Member</label>
+                            <select name="member" class="form-control" required>
+                                <option value="">Select Member</option>
+                                {% for m in members %}
+                                <option value="{{ m.id }}">{{ m.name }} ({{ m.contact }})</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="date" name="date" value="{{ today|date:'Y-m-d' }}" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Check-In Time</label>
+                            <input type="time" name="check_in" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Check-Out Time (Optional)</label>
+                            <input type="time" name="check_out" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Note (Optional)</label>
+                            <textarea class="form-control" name="note"></textarea>
+                        </div>
+                        
+                        <input type="submit" value="Mark Attendance" class="btn btn-primary btn-block">
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+</div>
+
+{% if error == "yes" %}
+<script>
+    alert('Something went wrong, try again!');
+    window.location = '{% url "markAttendance" %}';
+</script>
+{% endif %}
+
+{% if error == "no" %}
+<script>
+    alert('Attendance marked successfully!');
+    window.location = '{% url "viewAttendance" %}';
+</script>
+{% endif %} 

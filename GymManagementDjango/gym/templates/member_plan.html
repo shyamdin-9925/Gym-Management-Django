@@ -1,0 +1,21 @@
+{% extends "member_base.html" %}
+{% block title %}My Plan{% endblock %}
+{% block content %}
+<h1>My Membership</h1>
+<div class="card">
+  <h2>Current plan: {{ member.plan|default:"None" }}</h2>
+  {% if current_plan %}
+    <p>Fee: <b>Rs. {{ current_plan.amount }}</b> &nbsp;|&nbsp; Duration: <b>{{ current_plan.duration }}</b></p>
+  {% endif %}
+  <p class="muted">Member since {{ member.joindate|date:"d M Y" }}</p>
+  <h2 style="margin-top:18px">What is included</h2>
+  <ul class="plain">{% for f in feature_list %}<li>&#10003; {{ f }}</li>{% endfor %}</ul>
+</div>
+<div class="card">
+  <h2>All plans at our gym</h2>
+  <div class="table-scroll"><table>
+    <tr><th>Plan</th><th>Fee</th><th>Duration</th></tr>
+    {% for p in all_plans %}<tr><td>{{ p.name }} {% if p.name == member.plan %}<span class="tag">Your plan</span>{% endif %}</td><td>Rs. {{ p.amount }}</td><td>{{ p.duration }}</td></tr>{% endfor %}
+  </table></div>
+</div>
+{% endblock %}
